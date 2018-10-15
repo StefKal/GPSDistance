@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         tv_lon.setPadding(20,20, 20, 20);
         tv_lat.setPadding(20,20, 20, 20);
 
-        tv_dist.setText("TEXTEXET");
+        tv_dist.setText("TEXTEXETs");
         tv_lat.setText("TEXTEXET");
         tv_lon.setText("TEXTEXET");
 
