@@ -96,6 +96,11 @@ public class MainActivity extends Activity implements LocationListener {
     protected void onResume() {
         super.onResume();
 
+        location = getLastKnownLocation();
+        nextLat = location.getLatitude();
+        nextLon = location.getLongitude();
+        distance = 0.0;
+
         prevLat = null;
         prevLon = null;
         location = getLastKnownLocation();
