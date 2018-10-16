@@ -38,11 +38,17 @@ public class MainActivity extends Activity implements LocationListener {
     private Double nextLon;
 
     private TextView insta_velocity;
-    private Double distance;
+    private Double distance, totalDist;
+    private double vel_pnts;
     private float velocity;
 
-    DecimalFormat df_dist = new DecimalFormat("0.00km");
-    DecimalFormat df_vel = new DecimalFormat("0.00m/s");
+    private long start_time, end_time, time_elapsed;
+
+    boolean start = true;
+
+    DecimalFormat df_dist = new DecimalFormat("0.00m");
+    DecimalFormat df_vel = new DecimalFormat("Instant Velocity: 0.00m/s");
+    DecimalFormat df_vel_pnts = new DecimalFormat("0.00m/s");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,14 +103,14 @@ public class MainActivity extends Activity implements LocationListener {
     @Override
     protected void onResume() {
         super.onResume();
+
         initialLayout();
 
+        totalDist = 0.00;
         location = getLastKnownLocation();
         nextLat = location.getLatitude();
         nextLon = location.getLongitude();
         distance = 0.00;
-
-        createLayout();
 
         prevLat = nextLat;
         prevLon = nextLon;
@@ -114,16 +120,22 @@ public class MainActivity extends Activity implements LocationListener {
             @Override
             public void onClick(View v) {
 
+                start_time = System.currentTimeMillis();
+
+                //Toast.makeText(MainActivity.this, String.valueOf(start_time), Toast.LENGTH_LONG).show();
+
                 if(prevLat == nextLat && prevLon == nextLon) {
                     distance = 0.00;
+                    vel_pnts = 0.00;
+                    createLayout();
+                } else {
+
+                    createLayout();
+
+                    prevLat = nextLat;
+                    prevLon = nextLon;
+
                 }
-
-                createLayout();
-
-                prevLat = nextLat;
-                prevLon = nextLon;
-
-
             }
         });
 
@@ -179,7 +191,8 @@ public class MainActivity extends Activity implements LocationListener {
         tv_dist.setText(String.valueOf(df_dist.format(distance)));
         tv_lat.setText(String.valueOf(nextLat));
         tv_lon.setText(String.valueOf(nextLon));
-        //tv_veloc.setText(String.valueOf();
+        tv_veloc.setText(String.valueOf(df_vel_pnts.format(vel_pnts)));
+        insta_velocity.setText(df_vel.format(velocity));
 
 
         aLayout.addView(tv_lat);
@@ -225,12 +238,18 @@ public class MainActivity extends Activity implements LocationListener {
         nextLat = location.getLatitude();
         nextLon = location.getLongitude();
 
-        Toast.makeText(MainActivity.this, "Lat: " + nextLat +
-                " Lon: " + nextLon, Toast.LENGTH_LONG).show();
+        end_time = System.currentTimeMillis();
+        time_elapsed = end_time - start_time;
+        time_elapsed = time_elapsed / 1000; // get milliseconds to seconds
 
         distance = getDist(prevLat, prevLon, nextLat, nextLon);
-
+        vel_pnts =  distance/time_elapsed; // m/s
+        totalDist+= distance;
         velocity = location.getSpeed();
+
+        Toast.makeText(MainActivity.this, "Lat: " + nextLat +
+                " Lon: " + nextLon + " dist:" + distance + " vel:" + vel_pnts + " inst vel:" + velocity, Toast.LENGTH_LONG).show();
+
 
 
     }
