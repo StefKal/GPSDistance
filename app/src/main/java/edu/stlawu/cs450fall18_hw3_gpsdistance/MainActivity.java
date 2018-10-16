@@ -18,6 +18,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import static android.webkit.ConsoleMessage.MessageLevel.LOG;
@@ -38,8 +39,10 @@ public class MainActivity extends Activity implements LocationListener {
 
     private TextView insta_velocity;
     private Double distance;
+    private float velocity;
 
-
+    DecimalFormat df_dist = new DecimalFormat("0.00km");
+    DecimalFormat df_vel = new DecimalFormat("0.00m/s");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +63,7 @@ public class MainActivity extends Activity implements LocationListener {
             );
         }
         else {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, this);
         }
 
 
@@ -76,7 +79,7 @@ public class MainActivity extends Activity implements LocationListener {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                 try {
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, this);
                 }
                 catch(SecurityException e) {
                     return;  // should not get here
@@ -95,30 +98,32 @@ public class MainActivity extends Activity implements LocationListener {
     protected void onResume() {
         super.onResume();
         initialLayout();
+
         location = getLastKnownLocation();
         nextLat = location.getLatitude();
         nextLon = location.getLongitude();
-        distance = 0.0;
+        distance = 0.00;
 
-        location = getLastKnownLocation();
+        createLayout();
+
+        prevLat = nextLat;
+        prevLon = nextLon;
+
         checkpoint_btn.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
 
-                if (location != null) {
-                    if(prevLat == nextLat && prevLon == nextLon) {
-                        prevLon = location.getLongitude();
-                        prevLat = location.getLatitude();
-                        createLayout();
-                    }else{
-                        prevLat = nextLat;
-                        prevLon = nextLon;
-                        createLayout();
-                    }
-                    nextLat = location.getLatitude();
-                    nextLon = location.getLongitude();
-
+                if(prevLat == nextLat && prevLon == nextLon) {
+                    distance = 0.00;
                 }
+
+                createLayout();
+
+                prevLat = nextLat;
+                prevLon = nextLon;
+
+
             }
         });
 
@@ -171,10 +176,10 @@ public class MainActivity extends Activity implements LocationListener {
         tv_lat.setPadding(50,50, 70, 50);
         tv_veloc.setPadding(50, 50, 0, 50);
 
-        tv_dist.setText(String.valueOf(distance).substring(0, 3));
+        tv_dist.setText(String.valueOf(df_dist.format(distance)));
         tv_lat.setText(String.valueOf(nextLat));
         tv_lon.setText(String.valueOf(nextLon));
-        tv_veloc.setText(String.valueOf(location.getSpeed()).substring(0, 3));
+        //tv_veloc.setText(String.valueOf();
 
 
         aLayout.addView(tv_lat);
@@ -222,8 +227,12 @@ public class MainActivity extends Activity implements LocationListener {
 
         Toast.makeText(MainActivity.this, "Lat: " + nextLat +
                 " Lon: " + nextLon, Toast.LENGTH_LONG).show();
-        insta_velocity.setText("Instant Velocity: " + insta_velocity.toString());
+
         distance = getDist(prevLat, prevLon, nextLat, nextLon);
+
+        velocity = location.getSpeed();
+
+
     }
 
     @Override

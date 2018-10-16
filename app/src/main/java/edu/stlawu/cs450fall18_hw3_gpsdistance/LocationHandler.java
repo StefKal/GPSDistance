@@ -41,11 +41,11 @@ public class LocationHandler extends Observable
         if (act.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED) {
             lm.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER, 0, 0, this);
+                    LocationManager.GPS_PROVIDER, 1000, 10, this);
             lm.requestLocationUpdates(
-                    LocationManager.PASSIVE_PROVIDER, 0, 0, this);
+                    LocationManager.PASSIVE_PROVIDER, 2000, 0, this);
             lm.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER, 0, 0, this);
+                    LocationManager.NETWORK_PROVIDER, 2000, 0, this);
 
             // I don't think you are supposed to manually call onLocationChanged
             setChanged();
