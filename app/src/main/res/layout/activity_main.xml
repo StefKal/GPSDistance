@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical|center_horizontal|clip_vertical|clip_horizontal"
     tools:context=".MainActivity">
 
     <ScrollView
         android:id="@+id/myScrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="5">
 
         <LinearLayout
             android:id="@+id/SV_vertical_layout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="top|center"
+            android:layout_gravity="clip_vertical"
             android:orientation="vertical">
 
 
@@ -26,16 +26,41 @@
 
     </ScrollView>
 
-    <Button
-        android:id="@+id/checkpoint_btn"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:layout_weight="10"
+        android:orientation="vertical">
 
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_gravity="center|bottom"
-        android:gravity="top|bottom|center_vertical"
-        android:text="@string/checkpoint"
-        android:textAlignment="center" />
+        <TextView
+            android:id="@+id/avg_velo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Average Velocity: 0"
+            android:textSize="25sp" />
 
-</RelativeLayout>
+        <Button
+            android:id="@+id/checkpoint_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight="0.1"
+            android:text="@string/checkpoint"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/insta_velo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Instant Velocity: 0"
+            android:textSize="25sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

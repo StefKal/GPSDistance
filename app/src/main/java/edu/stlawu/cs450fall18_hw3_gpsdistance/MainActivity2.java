@@ -22,24 +22,13 @@ public class MainActivity2
 
     // textviews
     private LocationHandler location;
-    private ScrollView scrollView;
-
-
-
-    private Double prevLat, prevLon, nextLat, nextLon;
-
-
-
+    private Double lat, lon;
     final public static int REQUEST_ASK_FINE_LOCATION = 999;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.scrollView = findViewById(R.id.myScrollView);
-       // this.SV_vertical_layout = findViewById(R.id.SV_vertical_layout);
-
-
 
         this.location = new LocationHandler(this);
         this.location.addObserver(this);
@@ -51,14 +40,14 @@ public class MainActivity2
 
         if (observable instanceof LocationHandler) {
             Location l = (Location) o;
-            prevLat = l.getLatitude();
-            prevLon = l.getLongitude();
+            lat = l.getLatitude();
+            lon = l.getLongitude();
 
-            Toast.makeText(MainActivity2.this, "Lat: " + prevLat +
-                    " Lon: " + prevLon, Toast.LENGTH_LONG).show();
+
+            Toast.makeText(MainActivity2.this, "Lat: MainActivity2 " + lat +
+                    " Lon: " + lon, Toast.LENGTH_LONG).show();
         }
     }
-
 
 
     @Override

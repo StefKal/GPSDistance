@@ -31,7 +31,15 @@ public class MainActivity extends Activity implements LocationListener {
     Location location;
     private LinearLayout SV_vertical_layout;
 
-    private Double prevLat, prevLon, nextLat, nextLon, velocity;
+    private Double prevLat;
+    private Double prevLon;
+    private Double nextLat;
+    private Double nextLon;
+
+
+
+    private Double velocity;
+    private Double distance;
 
 
 
@@ -107,6 +115,7 @@ public class MainActivity extends Activity implements LocationListener {
                     }
                     nextLat = location.getLatitude();
                     nextLon = location.getLongitude();
+                    distance = getDist(prevLat, prevLon, nextLat, nextLon);
                 }
             }
         });
@@ -149,16 +158,18 @@ public class MainActivity extends Activity implements LocationListener {
         LinearLayout aLayout = new LinearLayout(MainActivity.this);
         aLayout.setOrientation(LinearLayout.HORIZONTAL);
 
+
         TextView tv_lon = new TextView(MainActivity.this);
         TextView tv_lat = new TextView(MainActivity.this);
         TextView tv_dist = new TextView(MainActivity.this);
         TextView tv_veloc = new TextView(MainActivity.this);
 
-        tv_dist.setPadding(20,20, 20, 20);
-        tv_lon.setPadding(20,20, 20, 20);
-        tv_lat.setPadding(20,20, 20, 20);
+        tv_dist.setPadding(50,50, 70, 50);
+        tv_lon.setPadding(50,50, 70, 50);
+        tv_lat.setPadding(50,50, 70, 50);
+        tv_veloc.setPadding(50, 50, 0, 50);
 
-        tv_dist.setText(String.valueOf(getDist(prevLat, prevLon, nextLat, nextLon)));
+        tv_dist.setText(String.valueOf(distance));
         tv_lat.setText(String.valueOf(nextLat));
         tv_lon.setText(String.valueOf(nextLon));
         tv_veloc.setText(String.valueOf(location.getSpeed()));
@@ -175,11 +186,11 @@ public class MainActivity extends Activity implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        double lat = location.getLatitude();
-        double lon = location.getLongitude();
+        nextLat = location.getLatitude();
+        nextLon = location.getLongitude();
 
-        Toast.makeText(MainActivity.this, "Lat: " + lat +
-                " Lon: " + lon, Toast.LENGTH_LONG).show();
+        Toast.makeText(MainActivity.this, "Lat: " + nextLat +
+                " Lon: " + nextLon, Toast.LENGTH_LONG).show();
     }
 
     @Override
