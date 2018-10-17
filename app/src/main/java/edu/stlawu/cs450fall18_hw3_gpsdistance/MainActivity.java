@@ -39,7 +39,7 @@ public class MainActivity extends Activity implements LocationListener {
     private Double nextLat;
     private Double nextLon;
 
-    private TextView insta_velocity, avg_velocity;
+    private TextView insta_velocity, avg_velocity, totalDist_tv;
     private Double distance, totalDist;
     private double vel_pnts, avgVel;
     private float velocity;
@@ -62,6 +62,7 @@ public class MainActivity extends Activity implements LocationListener {
         SV_vertical_layout = findViewById(R.id.SV_vertical_layout);
         insta_velocity = findViewById(R.id.insta_velo);
         avg_velocity = findViewById(R.id.avg_velo);
+        totalDist_tv = findViewById(R.id.total_dist);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -258,6 +259,7 @@ public class MainActivity extends Activity implements LocationListener {
         distance = getDist(prevLat, prevLon, nextLat, nextLon);
         vel_pnts =  distance/time_elapsed; // m/s
         totalDist+= distance;
+        totalDist_tv.setText(totalDist.toString());
         velocity = location.getSpeed();
 
         avgVel = totalDist/(end_time - first_start_time);
@@ -302,6 +304,6 @@ public class MainActivity extends Activity implements LocationListener {
 
         double a = Math.pow(Math.sin(dLat / 2),2) + Math.pow(Math.sin(dLon / 2),2) * Math.cos(prevLat) * Math.cos(nextLat);
         double c = 2 * Math.asin(Math.sqrt(a));
-        return 6372.8 * c;
+        return 6372800 * c;
     }
 }
