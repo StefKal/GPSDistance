@@ -3,6 +3,7 @@ package edu.stlawu.cs450fall18_hw3_gpsdistance;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -20,24 +21,26 @@ import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 
 public class MainActivity extends Activity implements LocationListener {
 
-
+    int layoutId = R.layout.activity_main;
     LocationManager locationManager;
     private Button checkpoint_btn;
     final private int REQUEST_ASK_FINE_LOCATION = 999;
     Location location;
+
+
+
     private LinearLayout SV_vertical_layout;
-
-
-
     private Double prevLat;
     private Double prevLon;
     private Double nextLat;
     private Double nextLon;
+    private SharedPreferences myPref;
 
     private TextView insta_velocity, avg_velocity, totalDist_tv;
     private Double distance, totalDist;
@@ -54,9 +57,12 @@ public class MainActivity extends Activity implements LocationListener {
     DecimalFormat df_avg_vel = new DecimalFormat("Average Velocity: 0.00m/s");
     DecimalFormat df_vel_pnts = new DecimalFormat("0.00m/s");
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         checkpoint_btn = findViewById(R.id.checkpoint_btn);
@@ -137,6 +143,9 @@ public class MainActivity extends Activity implements LocationListener {
 
                 //Toast.makeText(MainActivity.this, String.valueOf(start_time), Toast.LENGTH_LONG).show();
 
+
+                avgVel = totalDist/(end_time - first_start_time);
+
                 if(prevLat == nextLat && prevLon == nextLon) {
                     distance = 0.00;
                     vel_pnts = 0.00;
@@ -209,9 +218,8 @@ public class MainActivity extends Activity implements LocationListener {
         tv_lon.setText(String.valueOf(nextLon));
         tv_veloc.setText(String.valueOf(df_vel_pnts.format(vel_pnts)));
         insta_velocity.setText(df_vel.format(velocity));
-        avg_velocity.setText(df_avg_vel.format(avgVel));
-
-
+        avgVel= avgVel*1000;
+        avg_velocity.setText("Average Velocity: ".concat(String.valueOf(Math.round(avgVel*100.0)/100.0)).concat("m/s"));
 
 
         aLayout.addView(tv_lat);
@@ -249,6 +257,8 @@ public class MainActivity extends Activity implements LocationListener {
         aLayout.addView(tv_veloc);
 
         SV_vertical_layout.addView(aLayout);
+
+
     }
 
 
@@ -265,10 +275,17 @@ public class MainActivity extends Activity implements LocationListener {
         vel_pnts =  distance/time_elapsed; // m/s
         velocity = location.getSpeed();
 
-        avgVel = totalDist/(end_time - first_start_time);
 
         Toast.makeText(MainActivity.this, "Lat: " + nextLat +
                 " Lon: " + nextLon + " dist:" + distance + " vel:" + vel_pnts + " inst vel:" + velocity, Toast.LENGTH_LONG).show();
+
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
 
 
