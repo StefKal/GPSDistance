@@ -49,6 +49,7 @@ public class MainActivity extends Activity implements LocationListener {
     boolean first = true;
 
     DecimalFormat df_dist = new DecimalFormat("0.00m");
+    DecimalFormat df_total_dist = new DecimalFormat("Total Distance: 0.00m");
     DecimalFormat df_vel = new DecimalFormat("Instant Velocity: 0.00m/s");
     DecimalFormat df_avg_vel = new DecimalFormat("Average Velocity: 0.00m/s");
     DecimalFormat df_vel_pnts = new DecimalFormat("0.00m/s");
@@ -125,6 +126,7 @@ public class MainActivity extends Activity implements LocationListener {
             @Override
             public void onClick(View v) {
 
+
                 if (first) {
                     first_start_time = System.currentTimeMillis();
                 }
@@ -138,9 +140,12 @@ public class MainActivity extends Activity implements LocationListener {
                 if(prevLat == nextLat && prevLon == nextLon) {
                     distance = 0.00;
                     vel_pnts = 0.00;
+                    totalDist += distance;
+                    totalDist_tv.setText("Total Distance: ".concat(String.valueOf(Math.round(totalDist*100.0)/100.0)).concat("m"));
                     createLayout();
                 } else {
-
+                    totalDist += distance;
+                    totalDist_tv.setText("Total Distance: ".concat(String.valueOf(Math.round(totalDist*100.0)/100.0)).concat("m"));
                     createLayout();
 
                     prevLat = nextLat;
@@ -258,8 +263,6 @@ public class MainActivity extends Activity implements LocationListener {
 
         distance = getDist(prevLat, prevLon, nextLat, nextLon);
         vel_pnts =  distance/time_elapsed; // m/s
-        totalDist+= distance;
-        totalDist_tv.setText(totalDist.toString());
         velocity = location.getSpeed();
 
         avgVel = totalDist/(end_time - first_start_time);
