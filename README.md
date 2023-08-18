@@ -1,1 +1,1 @@
-# CS450Fall18_HW3_GPSDistance
+Android App to measure distance through GPS signal
